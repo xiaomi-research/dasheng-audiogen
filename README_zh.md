@@ -25,7 +25,7 @@
 ## 模型
 
 | 模型 | HuggingFace  | 语言支持 |
-|------|-------------|-----------|:--------:|
+|------|-------------|:--------:|
 | Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen)  | 英语 |
 | Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual) | 多语言 |
 
@@ -39,9 +39,30 @@ pip install torch torchaudio "transformers<5" einops
 
 > 已在 Python 3.10、torch 2.8.0+cu128、transformers 4.57 上测试通过。已知不兼容 transformers 5.x。
 
+## Prompt 格式
+
+Dasheng-AudioGen 使用结构化标签来描述不同的音频维度。有效的 prompt **必须以 `<|caption|>` 标签开头**，用于描述整体音频场景。其他标签为可选项，按需使用。
+
+| 标签 | 描述 | 是否必需 |
+|------|------|:--------:|
+| `<\|caption\|>` | 整体音频场景描述 | 是 |
+| `<\|speech\|>` | 说话人身份和说话风格 | 否 |
+| `<\|asr\|>` | 语音转写内容 / 对话文本 | 否 |
+| `<\|sfx\|>` | 音效 | 否 |
+| `<\|music\|>` | 背景音乐 | 否 |
+| `<\|env\|>` | 环境音 | 否 |
+
+**规则：**
+- Prompt 必须以 `<|caption|>` 开头，否则会报错。
+- 仅包含有实际内容的标签；没有对应内容的标签请省略（例如没有音乐则不传 `<|music|>`）。
+
+> **多语言 prompt 规范：** 使用多语言模型时，所有描述性标签（`caption`、`speech`、`sfx`、`music`、`env`）应使用**英文**填写，仅 `<|asr|>` 字段（实际要合成的语音内容）使用目标语言。
+
 ## 快速开始
 
-### 基本用法
+### 用法一：分维度组装
+
+通过命名参数分别传入各个维度的描述。`caption` 为必填项，其他字段可选。
 
 ```python
 import torchaudio
@@ -49,18 +70,6 @@ from transformers import AutoModel
 
 model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
 
-# 或者加载多语言模型
-# model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen-Multilingual", trust_remote_code=True).cuda()
-
-audio = model.generate("A dog barking in a park")
-torchaudio.save("output.wav", audio.cpu(), 16000)
-```
-
-### 分项 Prompt
-
-使用 `compose_prompt` 分别描述不同的音频维度：
-
-```python
 prompt = model.compose_prompt(
     caption="A gritty detective narrating over the sound of heavy rain and a melancholic solo jazz saxophone.",
     speech="gritty deep male voice",
@@ -73,17 +82,31 @@ audio = model.generate(prompt)
 torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
 
-也可以直接传入包含标签的完整字符串：
+### 用法二：传入完整 Prompt 字符串
+
+通过 `prompt` 参数传入预格式化的标签字符串，该字符串必须以 `<|caption|>` 开头。
 
 ```python
-audio = model.generate(
-    "<|caption|> A helicopter passing overhead. <|sfx|> Rhythmic helicopter blade sounds. <|env|> Open sky ambience."
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
+prompt = model.compose_prompt(
+    prompt="<|caption|> A gritty detective narrating over the sound of heavy rain and a melancholic solo jazz saxophone. <|speech|> gritty deep male voice <|asr|> The city never sleeps, but it sure knows how to cry. <|sfx|> heavy rain hitting pavement <|music|> melancholic solo saxophone <|env|> distant urban ambience"
 )
+audio = model.generate(prompt)
+torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
 
 ### 批量推理
 
 ```python
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
 prompts = [
     model.compose_prompt(caption="A cat meowing softly.", sfx="Soft cat meow."),
     model.compose_prompt(caption="Thunder rolling in the distance.", env="Stormy night ambience."),
@@ -98,30 +121,20 @@ for i, audio in enumerate(audios):
 ### 生成参数
 
 ```python
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
+prompt = model.compose_prompt(caption="A dog barking in a park")
 audio = model.generate(
-    prompts="A dog barking in a park",
+    prompts=prompt,
     num_steps=25,              # 去噪步数（默认：25）
     guidance_scale=5.0,        # 无分类器引导强度（默认：5.0）
     sway_sampling_coef=-1.0,   # sway 采样系数（默认：-1.0，设为 0 使用线性调度）
 )
+torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
-
-## Prompt 格式
-
-Dasheng-AudioGen 使用结构化标签来描述不同的音频维度：
-
-| 标签 | 描述 |
-|------|------|
-| `<\|caption\|>` | 整体音频场景描述 |
-| `<\|speech\|>` | 说话人身份和说话风格 |
-| `<\|asr\|>` | 语音转写内容 / 对话文本 |
-| `<\|sfx\|>` | 音效 |
-| `<\|music\|>` | 背景音乐 |
-| `<\|env\|>` | 环境音 |
-
-你可以传入包含标签的完整 `content` 字符串，也可以通过 `compose_prompt` 分别提供各维度字段（`caption`、`speech`、`asr`、`sfx`、`music`、`env`），系统会自动拼接。
-
-> **多语言 prompt 规范：** 使用多语言模型时，所有描述性标签（`caption`、`speech`、`sfx`、`music`、`env`）应使用**英文**填写，仅 `<|asr|>` 字段（实际要合成的语音内容）使用目标语言。
 
 ## 致谢
 

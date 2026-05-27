@@ -1,3 +1,4 @@
+
 # Dasheng-AudioGen
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv)](https://arxiv.org/abs/2505.XXXXX)
@@ -39,9 +40,30 @@ pip install torch torchaudio "transformers<5" einops
 
 > Tested with Python 3.10, torch 2.8.0+cu128, transformers 4.57. Not compatible with transformers 5.x.
 
+## Prompt Format
+
+Dasheng-AudioGen uses structured tags to describe different audio aspects. A valid prompt **must start with the `<|caption|>` tag**, which provides the overall scene description. Other tags are optional and can be included as needed.
+
+| Tag | Description | Required |
+|-----|-------------|:--------:|
+| `<\|caption\|>` | Overall audio scene description | Yes |
+| `<\|speech\|>` | Speaker identity and speaking style | No |
+| `<\|asr\|>` | Spoken transcript / dialogue | No |
+| `<\|sfx\|>` | Sound effects | No |
+| `<\|music\|>` | Background music | No |
+| `<\|env\|>` | Environmental ambience | No |
+
+**Rules:**
+- The prompt must begin with `<|caption|>` — prompts without it will be rejected.
+- Only include tags that are relevant; omit tags with no content (e.g., skip `<|music|>` if there is no music).
+
+> **Multilingual note:** When using the multilingual model, all descriptive tags (`caption`, `speech`, `sfx`, `music`, `env`) should be in **English**. Only the `<|asr|>` field (the actual speech content to synthesize) uses the target language.
+
 ## Quick Start
 
-### Basic Usage
+### Usage 1: Aspect-wise Composition
+
+Pass each aspect as a named argument. The `caption` field is required; all other fields are optional.
 
 ```python
 import torchaudio
@@ -49,18 +71,6 @@ from transformers import AutoModel
 
 model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
 
-# Or load the multilingual model
-# model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen-Multilingual", trust_remote_code=True).cuda()
-
-audio = model.generate("A dog barking in a park")
-torchaudio.save("output.wav", audio.cpu(), 16000)
-```
-
-### Aspect-wise Prompt
-
-Use `compose_prompt` to describe different audio aspects separately:
-
-```python
 prompt = model.compose_prompt(
     caption="A gritty detective narrating over the sound of heavy rain and a melancholic solo jazz saxophone.",
     speech="gritty deep male voice",
@@ -73,17 +83,31 @@ audio = model.generate(prompt)
 torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
 
-You can also pass a pre-formatted string with tags directly:
+### Usage 2: Pre-formatted Prompt String
+
+Pass a complete tagged string via the `prompt` parameter. The string must start with `<|caption|>`.
 
 ```python
-audio = model.generate(
-    "<|caption|> A helicopter passing overhead. <|sfx|> Rhythmic helicopter blade sounds. <|env|> Open sky ambience."
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
+prompt = model.compose_prompt(
+    prompt="<|caption|> A gritty detective narrating over the sound of heavy rain and a melancholic solo jazz saxophone. <|speech|> gritty deep male voice <|asr|> The city never sleeps, but it sure knows how to cry. <|sfx|> heavy rain hitting pavement <|music|> melancholic solo saxophone <|env|> distant urban ambience"
 )
+audio = model.generate(prompt)
+torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
 
 ### Batch Inference
 
 ```python
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
 prompts = [
     model.compose_prompt(caption="A cat meowing softly.", sfx="Soft cat meow."),
     model.compose_prompt(caption="Thunder rolling in the distance.", env="Stormy night ambience."),
@@ -98,30 +122,20 @@ for i, audio in enumerate(audios):
 ### Generation Parameters
 
 ```python
+import torchaudio
+from transformers import AutoModel
+
+model = AutoModel.from_pretrained("mispeech/Dasheng-AudioGen", trust_remote_code=True).cuda()
+
+prompt = model.compose_prompt(caption="A dog barking in a park")
 audio = model.generate(
-    prompts="A dog barking in a park",
+    prompts=prompt,
     num_steps=25,              # number of denoising steps (default: 25)
     guidance_scale=5.0,        # classifier-free guidance scale (default: 5.0)
     sway_sampling_coef=-1.0,   # sway sampling coefficient (default: -1.0, 0 for linear)
 )
+torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
-
-## Prompt Format
-
-Dasheng-AudioGen uses structured tags to describe different audio aspects:
-
-| Tag | Description |
-|-----|-------------|
-| `<\|caption\|>` | Overall audio scene description |
-| `<\|speech\|>` | Speaker identity and speaking style |
-| `<\|asr\|>` | Spoken transcript / dialogue |
-| `<\|sfx\|>` | Sound effects |
-| `<\|music\|>` | Background music |
-| `<\|env\|>` | Environmental ambience |
-
-You can either pass a pre-formatted `content` string with tags, or provide individual aspect fields (`caption`, `speech`, `asr`, `sfx`, `music`, `env`) via `compose_prompt` which will be automatically composed.
-
-> **Multilingual prompt convention:** When using the multilingual model, all tags (`caption`, `speech`, `sfx`, `music`, `env`) should be written in **English**. Only the `<|asr|>` field (the actual spoken content to be synthesized) should use the target language.
 
 ## Acknowledgments
 
