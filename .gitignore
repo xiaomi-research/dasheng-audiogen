@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Checkpoints (hosted on HuggingFace Hub)
+ckpt/
+
+# Generated outputs
+outputs/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+.venv/
+env/
+venv/
