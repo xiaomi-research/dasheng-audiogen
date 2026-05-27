@@ -137,6 +137,12 @@ audio = model.generate(
 torchaudio.save("output.wav", audio.cpu(), 16000)
 ```
 
+## Evaluation
+
+Dasheng-AudioGen is evaluated on the English subset of the test split from the mixed-audio dataset [MECAT-Caption](https://huggingface.co/datasets/mispeech/MECAT-Caption), which covers about 60% of the original test set.
+
+To ensure the paper results are reproducible, we provide the audio IDs and captions of this English test subset in the [`evaluation/`](./evaluation) directory.
+
 ## Acknowledgments
 
 Dasheng-AudioGen was developed with contributions from **XIAOMI LLM PLUS** and **SJTU X-LANCE**.
