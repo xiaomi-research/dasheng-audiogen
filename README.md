@@ -10,20 +10,26 @@
 
 **Dasheng-AudioGen** is a unified audio generation model that can jointly synthesize **intelligible speech, music, sound effects, and environmental acoustics** from text descriptions.
 
-<div align="center">
-  <video src="./examples/dasheng-audiogen-demo-video.mp4" width="70%" controls>
-    Your browser does not support the video tag.
+<p align="center">
+  <video
+    src="https://github.com/user-attachments/assets/497f5688-8731-4830-8ee7-b9cf4234d900"
+    controls
+    autoplay
+    muted
+    loop
+    playsinline
+    width="85%">
   </video>
-</div>
+</p>
 
 ## Models
 
-| Model | HuggingFace | Text Encoder | Language |
-|-------|-------------|-------------|:--------:|
-| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen) | `google/flan-t5-large` | English |
-| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual) | `google/mt5-large` | Multilingual |
+| Model | HuggingFace  | Language |
+|-------|-------------|:--------:|
+| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen)  | English |
+| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual)  | Multilingual |
 
-> **Note:** The current multilingual model has notably higher synthesis error rates for all non-English languages. Languages outside the table above are even less reliable. For English-only use cases, the base model (`mispeech/Dasheng-AudioGen`) is recommended.
+> **Note:** The current multilingual model has notably higher synthesis error rates for all non-English languages. For English-only use cases, the base model (`mispeech/Dasheng-AudioGen`) is recommended.
 
 ## Installation
 

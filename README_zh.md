@@ -10,20 +10,26 @@
 
 **Dasheng-AudioGen** 是一个统一的音频生成模型，能够根据文本描述同时合成**语音、音乐、音效和环境声**。
 
-<div align="center">
-  <video src="./examples/dasheng-audiogen-demo-video.mp4" width="70%" controls>
-    您的浏览器不支持视频标签。
+<p align="center">
+  <video
+    src="https://github.com/user-attachments/assets/497f5688-8731-4830-8ee7-b9cf4234d900"
+    controls
+    autoplay
+    muted
+    loop
+    playsinline
+    width="85%">
   </video>
-</div>
+</p>
 
 ## 模型
 
-| 模型 | HuggingFace | 文本编码器 | 语言支持 |
+| 模型 | HuggingFace  | 语言支持 |
 |------|-------------|-----------|:--------:|
-| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen) | `google/flan-t5-large` | 英语 |
-| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual) | `google/mt5-large` | 多语言 |
+| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen)  | 英语 |
+| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual) | 多语言 |
 
-> **注意：** 当前多语言模型在所有非英语语言上的合成错误率都明显偏高，表中未列出的语言更不稳定。如果仅需英语生成，建议使用基础模型 (`mispeech/Dasheng-AudioGen`)。
+> **注意：** 当前多语言模型在所有非英语语言上的合成错误率都明显偏高。如果仅需英语生成，建议使用基础模型 (`mispeech/Dasheng-AudioGen`)。
 
 ## 安装
 
