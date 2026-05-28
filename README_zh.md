@@ -147,7 +147,7 @@ Dasheng-AudioGen 使用混合音频数据集 [MECAT-Caption](https://huggingface
 Dasheng-AudioGen 由**小米 LLM PLUS** 和 **上海交通大学 X-LANCE** 联合开发。
 
 ## 引用
-```bibtex id="l3t4d8"
+```bibtex
 @article{mei2026dashengaudiogen,
   title   = {Dasheng AudioGen: A Unified Model for Generating Coherent Audio Scenes from Text},
   author  = {Jiahao Mei and Heinrich Dinkel and Yadong Niu and Xingwei Sun and Gang Li and Yifan Liao and Jiahao Zhou and Junbo Zhang and Jian Luan and Mengyue Wu},

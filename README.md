@@ -148,7 +148,7 @@ To ensure the paper results are reproducible, we provide the audio IDs and capti
 Dasheng-AudioGen was developed with contributions from **XIAOMI LLM PLUS** and **SJTU X-LANCE**.
 
 ## Citation
-```bibtex id="l3t4d8"
+```bibtex
 @article{mei2026dashengaudiogen,
   title   = {Dasheng AudioGen: A Unified Model for Generating Coherent Audio Scenes from Text},
   author  = {Jiahao Mei and Heinrich Dinkel and Yadong Niu and Xingwei Sun and Gang Li and Yifan Liao and Jiahao Zhou and Junbo Zhang and Jian Luan and Mengyue Wu},
