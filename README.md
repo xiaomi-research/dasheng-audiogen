@@ -1,7 +1,7 @@
 
 # Dasheng-AudioGen
 
-[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv)](https://arxiv.org/abs/2505.XXXXX)
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv)](https://arxiv.org/abs/2605.27838)
 [![Hugging Face Model](https://img.shields.io/badge/HuggingFace-Model-orange?logo=huggingface)](https://huggingface.co/mispeech/Dasheng-AudioGen)
 [![Hugging Face Demo](https://img.shields.io/badge/HuggingFace-Demo-orange?logo=huggingface)](https://huggingface.co/spaces/mispeech/Dasheng-AudioGen)
 [![Web Demo](https://img.shields.io/badge/Website-Demo-181717?logo=google-chrome)](https://nieeim.github.io/Dasheng-AudioGen-Web/)
@@ -148,15 +148,15 @@ To ensure the paper results are reproducible, we provide the audio IDs and capti
 Dasheng-AudioGen was developed with contributions from **XIAOMI LLM PLUS** and **SJTU X-LANCE**.
 
 ## Citation
-
-```bibtex
-@article{dasheng-audiogen,
-  title={Dasheng-AudioGen},
-  author={},
-  journal={arXiv preprint arXiv:2505.XXXXX},
-  year={2025}
+```bibtex id="l3t4d8"
+@article{mei2026dashengaudiogen,
+  title   = {Dasheng AudioGen: A Unified Model for Generating Coherent Audio Scenes from Text},
+  author  = {Jiahao Mei and Heinrich Dinkel and Yadong Niu and Xingwei Sun and Gang Li and Yifan Liao and Jiahao Zhou and Junbo Zhang and Jian Luan and Mengyue Wu},
+  journal = {arXiv preprint arXiv:2605.27838},
+  year    = {2026}
 }
 ```
+
 
 ## License
 
