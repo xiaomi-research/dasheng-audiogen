@@ -22,14 +22,6 @@
   </video>
 </p>
 
-## 模型
-
-| 模型 | HuggingFace  | 语言支持 |
-|------|-------------|:--------:|
-| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen)  | 英语 |
-| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual) | 多语言 |
-
-> **注意：** 当前多语言模型在所有非英语语言上的合成错误率都明显偏高。如果仅需英语生成，建议使用基础模型 (`mispeech/Dasheng-AudioGen`)。
 
 ## 安装
 
