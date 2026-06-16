@@ -23,15 +23,6 @@
   </video>
 </p>
 
-## Models
-
-| Model | HuggingFace  | Language |
-|-------|-------------|:--------:|
-| Dasheng-AudioGen | [mispeech/Dasheng-AudioGen](https://huggingface.co/mispeech/Dasheng-AudioGen)  | English |
-| Dasheng-AudioGen-Multilingual | [mispeech/Dasheng-AudioGen-Multilingual](https://huggingface.co/mispeech/Dasheng-AudioGen-Multilingual)  | Multilingual |
-
-> **Note:** The current multilingual model has notably higher synthesis error rates for all non-English languages. For English-only use cases, the base model (`mispeech/Dasheng-AudioGen`) is recommended.
-
 ## Installation
 
 ```bash
